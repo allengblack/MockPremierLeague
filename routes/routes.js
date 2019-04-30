@@ -1,6 +1,11 @@
-var express = require('express');
-var routes = express.Router();
-var users = require('../controllers/usersController');
+const auth = require('../controllers/authController');
+const express = require('express');
+const routes = express.Router();
+const users = require('../controllers/usersController');
+
+//auth
+routes.post('/signup', auth.signUp);
+routes.post('/login', auth.login);
 
 //users
 routes.get('/api/users', users.listAllUsers);
