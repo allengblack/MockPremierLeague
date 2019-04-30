@@ -1,16 +1,18 @@
 const db = require('../models');
+const verifyToken = require('../routes/verifyToken');
 
 module.exports = {
     listAllUsers: (req, res) => {
+        verifyToken(req, res);
+
         return db.User.findAll()
         .then((users) => res.send(users))
-        .catch((err) => {
-            console.log('There was an error querying users', JSON.stringify(err))
-            return res.send(err)
-        });
+        .catch((err) => res.send(err));
     },
     
     getUserById: (req, res) => {
+        verifyToken(req, res);
+
         const id = parseInt(req.params.id);
         return db.User.findByPk(id)
         .then(user => res.send(user))
@@ -18,6 +20,8 @@ module.exports = {
     },
 
     createUser: (req, res) => {
+        verifyToken(req, res);
+
         const { name, email, password } = req.body;
         return db.User.create({ name, email, password })
         .then((user) => res.send(user))
@@ -28,6 +32,8 @@ module.exports = {
     }, 
 
     deleteUser: (req, res) => {
+        verifyToken(req, res);
+
         const id = parseInt(req.params.id);
         return db.User.findByPk(id)
         .then((user) => user.destroy())
@@ -39,8 +45,9 @@ module.exports = {
     },
 
     updateUser: (req, res) => {
-        const id = parseInt(req.params.id);
+        verifyToken(req, res);
 
+        const id = parseInt(req.params.id);
         return db.User.findByPk(id)
         .then((user) => {
             const { name, email } = req.body;
