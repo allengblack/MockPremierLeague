@@ -4,6 +4,7 @@ const routes = require('./routes/routes');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('./models');
+const Sequelize = require('sequelize');
 
 const PORT = +process.env.PORT || 3000;
 const SECRET_KEY = "secretkey23456";
@@ -13,26 +14,51 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended:  false }));
 app.use(bodyParser.json());
 
-app.post('/register', (req, res) => {
-    const  name  =  req.body.name;
-    const  email  =  req.body.email;
+app.post('/signup', (req, res) => {
+    const { name, email }  =  req.body;
     const  password  =  bcrypt.hashSync(req.body.password);
 
     createUser({name, email, password})       
         .then(user => {
-            const expiresIn  =  24 * 60 * 60;
+            res.status(200).send({ "message": "user created succesfully" });
+        })
+        .catch(err => {
+            if (err instanceof Sequelize.UniqueConstraintError) {
+                res.status(400).send('User email already exists');
+            }
+            res.status(500).send('Error creating user.')
+        });
+});
 
-            const accessToken = jwt.sign({ id: user.id }, SECRET_KEY, {
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+
+    findUserByEmail(email)
+        .then(user => {
+            bcrypt.compare(password, user.password, (err, valid) => {
+                if (err) res.status(500).send('Error validating password.');
+
+                if (valid == false) {
+                    res.status(401).send('Password not valid!');
+                }
+            });
+            
+            const expiresIn  =  24 * 60 * 60;
+            const accessToken = jwt.sign({ id: user.id, name: user.name, email: user.email }, SECRET_KEY, {
                 expiresIn:  expiresIn
             });
 
-            res.status(200).send({ "user":  user, "access_token":  accessToken, "expires_in":  expiresIn          
+            res.status(200)
+            .send({ 
+                "user": { "id": user.id, "name": user.name, "email": user.email }, 
+                "access_token": accessToken, 
+                "expires_in": expiresIn 
             });
         })
-        .catch(err => res.status(500).send('Server error!'));
+        .catch(err => res.status(404).send('User not found'));
 });
 
-// app.use('/', routes);
+app.use('/', routes);
 
 app.listen(PORT, () => {  
   console.log('Server is running on port ' + PORT);
