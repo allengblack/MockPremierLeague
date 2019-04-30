@@ -18,12 +18,14 @@ module.exports = {
      name: 'Allen Gbolahan',
      email: 'allengbolahan@gmail.com',
      password: bcrypt.hashSync('p@$$w0rd'),
+     isAdmin: true,
      createdAt: new Date().toDateString(),
      updatedAt: new Date().toDateString()
     }, {
       name: 'Michael Ikechi',
       email: 'michaelikechim@gmail.com',
       password: bcrypt.hashSync('p@$$w0rd'),
+      isAdmin: false,
       createdAt: new Date().toDateString(),
       updatedAt: new Date().toDateString()
      }], {});

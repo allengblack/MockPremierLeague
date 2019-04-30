@@ -17,7 +17,7 @@ module.exports = {
         const { name, email }  =  req.body;
         const  password  =  bcrypt.hashSync(req.body.password);
 
-        createUser({name, email, password})       
+        createUser({ name, email, password, isAdmin: false })       
         .then(user => {
             res.status(200).send({ "message": "user created succesfully" });
         })
@@ -43,7 +43,7 @@ module.exports = {
             });
             
             const expiresIn  =  24 * 60 * 60;
-            const accessToken = jwt.sign({ id: user.id, name: user.name, email: user.email }, SECRET_KEY, {
+            const accessToken = jwt.sign({ id: user.id, name: user.name, email: user.email, isAdmin: user.isAdmin }, SECRET_KEY, {
                 expiresIn:  expiresIn
             });
 

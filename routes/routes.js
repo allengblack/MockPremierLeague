@@ -10,7 +10,7 @@ routes.post('/login', auth.login);
 //users
 routes.get('/api/users', users.listAllUsers);
 routes.get('/api/users/:id', users.getUserById);
-routes.post('/api/users', users.createUser);
+// routes.post('/api/users', users.createUser);
 routes.put('/api/users/:id', users.updateUser);
 routes.delete('/api/users/:id', users.deleteUser);
 
