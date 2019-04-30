@@ -1,5 +1,3 @@
-const express = require('express');  
-const bodyParser = require('body-parser');
 const db = require('../models');
 
 module.exports = {
@@ -20,8 +18,8 @@ module.exports = {
     },
 
     createUser: (req, res) => {
-        const { name, email } = req.body;
-        return db.User.create({ name, email })
+        const { name, email, password } = req.body;
+        return db.User.create({ name, email, password })
         .then((user) => res.send(user))
         .catch((err) => {
             console.log('There was an error creating a user', JSON.stringify(user));

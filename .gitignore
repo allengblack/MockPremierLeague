@@ -63,3 +63,4 @@ typings/
 .vscode
 database.db
 database.sqlite3
+const.js
