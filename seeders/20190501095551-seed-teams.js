@@ -1,7 +1,5 @@
 'use strict';
 
-const bcrypt = require('bcryptjs');
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
     /*
@@ -14,32 +12,28 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-   return queryInterface.bulkInsert('Users', 
-    [{
-     name: 'Allen Gbolahan',
-     email: 'allengbolahan@gmail.com',
-     password: bcrypt.hashSync('p@$$w0rd'),
-     isAdmin: true,
-     createdAt: new Date().toDateString(),
-     updatedAt: new Date().toDateString()
-      }, 
-      {
-      name: 'Michael Ikechi',
-      email: 'michaelikechim@gmail.com',
-      password: bcrypt.hashSync('p@$$w0rd'),
-      isAdmin: false,
+   return queryInterface.bulkInsert('Teams', 
+    [{ 
+      name: 'Chelsea FC',
       createdAt: new Date().toDateString(),
       updatedAt: new Date().toDateString()
-     },
-     {
-      name: 'John Doe',
-      email: 'johndoe@email.com',
-      password: bcrypt.hashSync('p@$$w0rd'),
-      isAdmin: false,
+    }, 
+    {
+      name: 'Bolton Wanderers FC',
       createdAt: new Date().toDateString(),
       updatedAt: new Date().toDateString()
-     }
-    ], {});
+    }, 
+    {
+      name: 'Kano Pillars',
+      createdAt: new Date().toDateString(),
+      updatedAt: new Date().toDateString()
+    },
+    {
+      name: 'Leeds United FC',
+      createdAt: new Date().toDateString(),
+      updatedAt: new Date().toDateString()
+    }],
+    {});
   },
 
   down: (queryInterface, Sequelize) => {
@@ -50,6 +44,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-   return queryInterface.bulkDelete('Users', null, {});
+   return queryInterface.bulkDelete('Teams', null, {});
   }
 };
