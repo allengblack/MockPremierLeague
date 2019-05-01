@@ -1,6 +1,6 @@
 const db = require('../models');
 const bcrypt = require('bcryptjs');
-const SECRET_KEY = "secretkey23456";
+const SECRET_KEY = require('../const');
 const Sequelize = require('sequelize');
 const jwt = require('jsonwebtoken');
 
@@ -25,7 +25,7 @@ module.exports = {
             if (err instanceof Sequelize.UniqueConstraintError) {
                 res.status(400).send('User email already exists');
             }
-            res.status(500).send('Error creating user.')
+            res.status(500).send('Error creating user.');
         });
     },
 
