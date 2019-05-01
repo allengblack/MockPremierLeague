@@ -15,23 +15,23 @@ module.exports = {
    return queryInterface.bulkInsert('Teams', 
     [{ 
       name: 'Chelsea FC',
-      createdAt: new Date().toDateString(),
-      updatedAt: new Date().toDateString()
+      createdAt: new Date(),
+      updatedAt: new Date()
     }, 
     {
       name: 'Bolton Wanderers FC',
-      createdAt: new Date().toDateString(),
-      updatedAt: new Date().toDateString()
+      createdAt: new Date(),
+      updatedAt: new Date()
     }, 
     {
       name: 'Kano Pillars',
-      createdAt: new Date().toDateString(),
-      updatedAt: new Date().toDateString()
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
       name: 'Leeds United FC',
-      createdAt: new Date().toDateString(),
-      updatedAt: new Date().toDateString()
+      createdAt: new Date(),
+      updatedAt: new Date()
     }],
     {});
   },

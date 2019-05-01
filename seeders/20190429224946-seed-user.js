@@ -20,24 +20,24 @@ module.exports = {
      email: 'allengbolahan@gmail.com',
      password: bcrypt.hashSync('p@$$w0rd'),
      isAdmin: true,
-     createdAt: new Date().toDateString(),
-     updatedAt: new Date().toDateString()
+     createdAt: new Date(),
+     updatedAt: new Date()
       }, 
       {
       name: 'Michael Ikechi',
       email: 'michaelikechim@gmail.com',
       password: bcrypt.hashSync('p@$$w0rd'),
       isAdmin: false,
-      createdAt: new Date().toDateString(),
-      updatedAt: new Date().toDateString()
+      createdAt: new Date(),
+      updatedAt: new Date()
      },
      {
       name: 'John Doe',
       email: 'johndoe@email.com',
       password: bcrypt.hashSync('p@$$w0rd'),
       isAdmin: false,
-      createdAt: new Date().toDateString(),
-      updatedAt: new Date().toDateString()
+      createdAt: new Date(),
+      updatedAt: new Date()
      }
     ], {});
   },
