@@ -2,9 +2,9 @@ const db = require('../models');
 
 module.exports = {
     createFixture: (req, res) => {
-        const { homeTeamId, awayTeamId } = req.body;
+        const { homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate } = req.body;
 
-        return db.Fixture.create({ homeTeamId, awayTeamId })
+        return db.Fixture.create({ homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate })
             .then(fixture => res.status(201).send(fixture))
             .catch(err => {
                 if (err.name == 'SequelizeForeignKeyConstraintError') {
@@ -34,9 +34,9 @@ module.exports = {
         
         return db.Fixture.findByPk(id)
             .then(fixture => {
-                const { homeTeamId, awayTeamId } = req.body;
+                const { homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate } = req.body;
 
-                return fixture.update({ homeTeamId, awayTeamId })
+                return fixture.update({ homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate })
                     .then(() => res.send(fixture))
                     .catch(err => res.status(500).send('Error updating fixture.'));
             })

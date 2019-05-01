@@ -14,6 +14,23 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Team',
         key: 'id'
       },
+    },
+    homeTeamScore: {
+      type: DataTypes.INTEGER
+    },
+    awayTeamScore: {
+      type: DataTypes.INTEGER
+    },
+    matchDate: {
+      type: DataTypes.DATE
+    },
+    pending: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return (this.getDataValue('homeTeamScore') == null 
+          && this.getDataValue('awayTeamScore') == null)
+          //|| this.getDataValue('matchDate') > new Date()
+      }
     }
   }, {});
   Fixture.associate = function(models) {
