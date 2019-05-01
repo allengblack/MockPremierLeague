@@ -1,33 +1,27 @@
 const db = require('../models');
 
 module.exports = {
-    listAllUsers: (req, res) => {
-        if (!req.decoded.isAdmin) res.status(401).send('User must be admin to access this resource.');
-
+    getAllUsers: (req, res) => {
         return db.User.findAll()
-        .then((users) => res.send(users))
-        .catch((err) => res.send(err));
+            .then((users) => res.send(users))
+            .catch((err) => res.send(err));
     },
     
     getUserById: (req, res) => {
-        if (!req.decoded.isAdmin || req.decoded.id != req.params.id) res.status(401).send('User must be admin to access this resource.');
-
         const id = parseInt(req.params.id);
         return db.User.findByPk(id)
-        .then(user => res.send(user))
-        .catch(err => res.status(400).send(err));
+            .then(user => res.send(user))
+            .catch(err => res.status(400).send(err));
     },
 
     deleteUser: (req, res) => {
-        if (!req.decoded.isAdmin) res.status(401).send('User must be admin to access this resource.');
-
         const id = parseInt(req.params.id);
         return db.User.findByPk(id)
-        .then((user) => user.destroy())
-        .then(() => res.send({ id }))
-        .catch((err) => {
-            res.status(400).send(err)
-        });
+            .then((user) => user.destroy())
+            .then(() => res.send({ id }))
+            .catch((err) => {
+                res.status(400).send(err);
+            });
     },
 
     updateUser: (req, res) => {
