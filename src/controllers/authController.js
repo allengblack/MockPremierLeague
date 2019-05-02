@@ -1,6 +1,6 @@
 const db = require('../models');
 const bcrypt = require('bcryptjs');
-const SECRET_KEY = require('../const');
+const SECRET_KEY = require('../../const');
 const Sequelize = require('sequelize');
 const jwt = require('jsonwebtoken');
 

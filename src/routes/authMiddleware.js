@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = require('../const');
+const SECRET_KEY = require('../../const');
 
 const verifyUserAuthenticated = (req, res, next) => {
     const authHeader = req.headers['authorization'] || req.headers['x-access-token'];
