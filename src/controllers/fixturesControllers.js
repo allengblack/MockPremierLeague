@@ -119,12 +119,3 @@ module.exports = {
         } 
     }
 }
-
-const getFixtures = async (req, res, whereConditions) => {
-    try {
-        const fixtures = await db.Fixture.findAll({ where: whereConditions });
-        res.send(fixtures);
-    } catch (error) {
-        res.status(500).send('And error occured ' + error);
-    } 
-}
