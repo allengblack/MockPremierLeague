@@ -63,7 +63,8 @@ module.exports = {
     },
 
     searchFixtures: async (req, res) => {
-        let searchParams = {};
+        let searchParams = { where : {} };
+        searchParams.where.matchDate = {};
 
         const homeTeamName = req.query['homeTeamName'];
         const awayTeamName = req.query['awayTeamName'];
@@ -81,8 +82,7 @@ module.exports = {
                 }
             });
 
-            searchParams.homeTeamId = team.id;
-            return await getFixtures(req, res, searchParams);
+            searchParams.where.homeTeamId = team.id;
         }
 
         if(awayTeamName !== undefined) {
@@ -94,57 +94,29 @@ module.exports = {
                 }
             });
 
-            searchParams.awayTeamId = team.id;
-            return await getFixtures(req, res, searchParams);
-        }
-
-        if(teamName !== undefined) {
-            let team = await db.Team.findOne({ 
-                where: { 
-                    name: {
-                        [Op.substring]: teamName
-                    }
-                }
-            });
-            
-            searchParams.teamId = team.id;
-            return await getFixtures(req, res, searchParams);
+            searchParams.where.awayTeamId = team.id;
         }
 
         if(completed !== undefined) {
-            searchParams.pending = !completed;
-
-            try {
-                const fixtures = await db.Fixture.findAll({ where: { pending : { [Op.eq] : searchParams.pending } } });
-                res.send(fixtures);
-            } catch (error) {
-                res.status(500).send('And error occured ' + error);
-            } 
-
-            // return await getFixtures(req, res, { 'pending' : { [Op.eq] : !completed } });
+            searchParams.where.pending = {
+                [Op.eq] : !completed
+            };
         }
 
         if (fixturesAfterDate !== undefined) {
-            searchParams = {
-                matchDate : {
-                    [Op.gte]: fixturesAfterDate
-                }
-            };
-
-            return await getFixtures(req, res, searchParams);
+            searchParams.where.matchDate[Op.gte] = fixturesAfterDate;
         }
 
         if (fixturesBeforeDate !== undefined) {
-            searchParams = {
-                matchDate : {
-                    [Op.lte]: fixturesBeforeDate
-                }
-            };
-
-            return await getFixtures(req, res, searchParams);
+            searchParams.where.matchDate[Op.lte] = fixturesBeforeDate;
         }
 
-        res.redirect('/api/fixtures');
+        try {
+            const fixtures = await db.Fixture.findAll(searchParams);
+            res.send(fixtures);
+        } catch (error) {
+            res.status(500).send('And error occured ' + error);
+        } 
     }
 }
 
