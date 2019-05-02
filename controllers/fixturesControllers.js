@@ -1,4 +1,6 @@
 const db = require('../models');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
     createFixture: (req, res) => {
@@ -58,5 +60,99 @@ module.exports = {
             .catch((err) => {
                 res.status(400).send(err);
             });
+    },
+
+    searchFixtures: async (req, res) => {
+        let searchParams = {};
+
+        const homeTeamName = req.query['homeTeamName'];
+        const awayTeamName = req.query['awayTeamName'];
+        const teamName = req.query['teamName'];
+        const completed = req.query['completed'];
+        const fixturesBeforeDate = req.query['fixturesBeforeDate'];
+        const fixturesAfterDate = req.query['fixturesAfterDate'];
+
+        if(homeTeamName !== undefined) {
+            let team = await db.Team.findOne({ 
+                where: { 
+                    name: {
+                        [Op.substring]: homeTeamName
+                    }
+                }
+            });
+
+            searchParams.homeTeamId = team.id;
+            return await getFixtures(req, res, searchParams);
+        }
+
+        if(awayTeamName !== undefined) {
+            let team = await db.Team.findOne({ 
+                where: { 
+                    name: {
+                        [Op.substring]: awayTeamName
+                    }
+                }
+            });
+
+            searchParams.awayTeamId = team.id;
+            return await getFixtures(req, res, searchParams);
+        }
+
+        if(teamName !== undefined) {
+            let team = await db.Team.findOne({ 
+                where: { 
+                    name: {
+                        [Op.substring]: teamName
+                    }
+                }
+            });
+            
+            searchParams.teamId = team.id;
+            return await getFixtures(req, res, searchParams);
+        }
+
+        if(completed !== undefined) {
+            searchParams.pending = !completed;
+
+            try {
+                const fixtures = await db.Fixture.findAll({ where: { pending : { [Op.eq] : searchParams.pending } } });
+                res.send(fixtures);
+            } catch (error) {
+                res.status(500).send('And error occured ' + error);
+            } 
+
+            // return await getFixtures(req, res, { 'pending' : { [Op.eq] : !completed } });
+        }
+
+        if (fixturesAfterDate !== undefined) {
+            searchParams = {
+                matchDate : {
+                    [Op.gte]: fixturesAfterDate
+                }
+            };
+
+            return await getFixtures(req, res, searchParams);
+        }
+
+        if (fixturesBeforeDate !== undefined) {
+            searchParams = {
+                matchDate : {
+                    [Op.lte]: fixturesBeforeDate
+                }
+            };
+
+            return await getFixtures(req, res, searchParams);
+        }
+
+        res.redirect('/api/fixtures');
     }
+}
+
+const getFixtures = async (req, res, whereConditions) => {
+    try {
+        const fixtures = await db.Fixture.findAll({ where: whereConditions });
+        res.send(fixtures);
+    } catch (error) {
+        res.status(500).send('And error occured ' + error);
+    } 
 }
