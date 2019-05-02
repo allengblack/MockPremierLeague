@@ -16,6 +16,8 @@ routes.use(authMiddleware.verifyUserAuthenticated);
 routes.get('/api/fixtures', fixtures.getAllFixtures);
 routes.get('/api/fixtures/:id', fixtures.getFixtureById);
 
+routes.get('/api/search/fixtures', fixtures.searchFixtures);
+
 routes.use(authMiddleware.verifyUserIsAdmin);
 
 //users

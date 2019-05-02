@@ -25,12 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     },
     pending: {
-      type: DataTypes.VIRTUAL,
-      get() {
-        return (this.getDataValue('homeTeamScore') == null 
-          && this.getDataValue('awayTeamScore') == null)
-          //|| this.getDataValue('matchDate') > new Date()
-      }
+      type: DataTypes.BOOLEAN
     }
   }, {});
   Fixture.associate = function(models) {

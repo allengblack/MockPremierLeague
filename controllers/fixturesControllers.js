@@ -4,7 +4,9 @@ module.exports = {
     createFixture: (req, res) => {
         const { homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate } = req.body;
 
-        return db.Fixture.create({ homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate })
+        const pending = (homeTeamScore) == null && awayTeamScore == null; //|| this.getDataValue('matchDate') > new Date();
+
+        return db.Fixture.create({ homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate, pending })
             .then(fixture => res.status(201).send(fixture))
             .catch(err => {
                 if (err.name == 'SequelizeForeignKeyConstraintError') {
@@ -36,7 +38,9 @@ module.exports = {
             .then(fixture => {
                 const { homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate } = req.body;
 
-                return fixture.update({ homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate })
+                const pending = (homeTeamScore) == null && awayTeamScore == null; //|| this.getDataValue('matchDate') > new Date();
+
+                return fixture.update({ homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate, pending })
                     .then(() => res.send(fixture))
                     .catch(err => res.status(500).send('Error updating fixture.'));
             })
