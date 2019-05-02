@@ -1,4 +1,6 @@
 const express = require('express');
+const Joi = require('joi')
+const validator = require('express-joi-validation')({})
 const routes = express.Router();
 const authMiddleware = require('./authMiddleware');
 
@@ -8,7 +10,15 @@ const teams = require('../controllers/teamsController');
 const fixtures = require('../controllers/fixturesControllers');
 
 //auth
-routes.post('/signup', auth.signUp);
+routes.post('/signup', validator.body(
+    Joi.object({
+        name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().required()
+    }),
+    {}), 
+    auth.signUp);
+
 routes.post('/login', auth.login);
 
 routes.use(authMiddleware.verifyUserAuthenticated);

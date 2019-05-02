@@ -17,7 +17,7 @@ module.exports = {
         const { name, email }  =  req.body;
         const  password  =  bcrypt.hashSync(req.body.password);
 
-        createUser({ name, email, password, isAdmin: false })       
+        return createUser({ name, email, password, isAdmin: false })       
         .then(user => {
             res.status(200).send({ "message": "user created succesfully" });
         })
@@ -25,7 +25,7 @@ module.exports = {
             if (err instanceof Sequelize.UniqueConstraintError) {
                 res.status(400).send('User email already exists');
             }
-            res.status(500).send('Error creating user.');
+            res.status(500).send(err);
         });
     },
 
