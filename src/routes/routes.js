@@ -19,7 +19,12 @@ routes.post('/signup', validator.body(
     {}), 
     auth.signUp);
 
-routes.post('/login', auth.login);
+routes.post('/login', validator.body(
+    Joi.object({
+        email: Joi.string().email().required(),
+        password: Joi.string().required()
+    }), 
+    {}), auth.login);
 
 routes.use(authMiddleware.verifyUserAuthenticated);
 

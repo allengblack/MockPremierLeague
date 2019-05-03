@@ -19,7 +19,7 @@ module.exports = {
 
         return createUser({ name, email, password, isAdmin: false })       
         .then(user => {
-            res.status(200).send({ "message": "user created succesfully" });
+            res.status(201).send({ "message": "user created succesfully" });
         })
         .catch(err => {
             if (err instanceof Sequelize.UniqueConstraintError) {
@@ -32,18 +32,19 @@ module.exports = {
     login: (req, res) => {
         const { email, password } = req.body;
 
-        findUserByEmail(email)
+        return findUserByEmail(email)
         .then(user => {
             bcrypt.compare(password, user.password, (err, valid) => {
                 if (err) res.status(500).send('Error validating password.');
 
                 if (valid == false) {
-                    res.status(401).send('Password not valid!');
+                    res.status(400).send('Password not valid!');
                 }
             });
             
             const expiresIn  =  24 * 60 * 60;
-            const accessToken = jwt.sign({ id: user.id, name: user.name, email: user.email, isAdmin: user.isAdmin }, SECRET_KEY, {
+            const accessToken = jwt.sign({ id: user.id, name: user.name, email: user.email, isAdmin: user.isAdmin }, 
+                SECRET_KEY, {
                 expiresIn:  expiresIn
             });
 

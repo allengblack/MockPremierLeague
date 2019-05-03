@@ -6,7 +6,7 @@
   "scripts": {
     "test": "nyc mocha -R spec --recursive ./test --exit",
     "start": "node index.js",
-    "start-dev": "nodemon index.js",
+    "start-dev": "set \"NODE_ENV=development\" && nodemon index.js",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
     "db:migrate:rollback": "./node_modules/.bin/sequelize db:migrate:undo:all",
     "pretest": "npm run db:migrate -- --env test",
