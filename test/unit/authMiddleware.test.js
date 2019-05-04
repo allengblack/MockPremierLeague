@@ -112,20 +112,14 @@ describe('Auth Middleware unit tests', () => {
         });
 
         it('it should return 401 if user is not admin', () => {
-            return verifyUserIsAdmin({ ...req, decoded: {isAdmin: false } }, res, next)
-                .catch(err => {
-                    expect(res.statusCode).to.equal(401);
-                });
+            verifyUserIsAdmin({ ...req, decoded: {isAdmin: false } }, res, next)
+            expect(res.statusCode).to.equal(401);
         });
 
-        // it('it should call next() if user is admin', () => {
-        //     let mySpy = chai.spy(next);
-
-        //     return verifyUserIsAdmin({ ...req, decoded: { isAdmin: true } }, res, mySpy)
-        //         .then()
-        //         .then(() => {
-        //             expect(mySpy).to.have.been.called;
-        //         });
-        // });
+        it('it should call next() if user is admin', () => {
+            let mySpy = chai.spy(next);
+            verifyUserIsAdmin({ ...req, decoded: { isAdmin: true } }, res, mySpy)
+            mySpy.should.have.been.called();
+        });
     });
 });

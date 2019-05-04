@@ -36,13 +36,11 @@ const verifyUserAuthenticated = (req, res, next) => {
 }
 
 const verifyUserIsAdmin = (req, res, next) => {
-    return new Promise((reject, resolve) => {
-        if (!req.decoded.isAdmin) {
-            reject (res.status(401).send('User must be admin to access this resource.'));
-        } else {
-            resolve(next);
-        }
-    });
+    if (!req.decoded.isAdmin) {
+        res.status(401).send('User must be admin to access this resource.');
+    } else {
+        next();
+    }
 }
 
 module.exports = {
