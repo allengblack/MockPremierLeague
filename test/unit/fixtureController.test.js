@@ -134,6 +134,16 @@ describe('FixtureController Unit Tests', () => {
     });
 
     describe('updateFixture', () => {
+        after(async () => {
+            await db.Fixture.destroy({
+                where: {}
+            });
+
+            await db.Team.destroy({
+                where: {}
+            });
+        });
+        
         it('should return 204 on successful update', async () => {
             const team1 = await db.Team.create({ name: 'Uyo Meyo FC' });
             const team2 = await db.Team.create({ name: 'Lewl FC' });
