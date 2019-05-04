@@ -11,15 +11,20 @@ module.exports = {
 
     getAllTeams: (req, res) => {
         return db.Team.findAll()
-            .then(teams => res.send(teams))
-            .catch(err => res.status(404).send(err));
+            .then(teams => res.status(200).send(teams))
+            .catch(err => res.status(500).send(err));
     },
 
     getTeamById: (req, res) => {
         const id = parseInt(req.params.id);
+        
         return db.Team.findByPk(id)
-            .then(team => res.send(team))
-            .catch(err => res.status(400).send(err));
+            .then(team => {
+                res.status(200).send(team)
+            })
+            .catch(err => {
+                res.status(404).send(err)
+            });
     },
 
     updateTeam: (req, res) => {
@@ -29,11 +34,11 @@ module.exports = {
                 const { name } = req.body;
 
                 return team.update({ name })
-                    .then(() => res.send(team))
+                    .then(() => res.status(204).send(team))
                     .catch(err => res.status(500).send('Error updating team.'));
             })
             .catch((err) => {
-                res.status(400).send(err)
+                res.status(400).send(err);
             });
     },
 
@@ -41,7 +46,9 @@ module.exports = {
         const id = parseInt(req.params.id);
         return db.Team.findByPk(id)
             .then(team => team.destroy())
-            .then(() => res.send({ id }))
+            .then(() => {
+                res.status(204).send({ id });
+            })
             .catch((err) => {
                 res.status(400).send(err);
             });
