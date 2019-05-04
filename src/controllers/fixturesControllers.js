@@ -6,7 +6,7 @@ module.exports = {
     createFixture: (req, res) => {
         const { homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate } = req.body;
 
-        const pending = (homeTeamScore) == null && awayTeamScore == null; //|| this.getDataValue('matchDate') > new Date();
+        const pending = (homeTeamScore == null) && (awayTeamScore == null); //|| this.getDataValue('matchDate') > new Date();
 
         return db.Fixture.create({ homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate, pending })
             .then(fixture => res.status(201).send(fixture))
@@ -21,8 +21,8 @@ module.exports = {
 
     getAllFixtures: (req, res) => {
         return db.Fixture.findAll()
-            .then(fixtures => res.send(fixtures))
-            .catch(err => res.status(404).send(err));
+            .then(fixtures => res.status(200).send(fixtures))
+            .catch(err => res.status(500).send(err));
     },
 
     getFixtureById: (req, res) => {
@@ -30,7 +30,9 @@ module.exports = {
 
         return db.Fixture.findByPk(id)
             .then(fixture => res.send(fixture))
-            .catch(err => res.status(400).send(err));
+            .catch(err => {
+                res.status(404).send(err)
+            });
     },
 
     updateFixture: (req, res) => {
@@ -40,10 +42,10 @@ module.exports = {
             .then(fixture => {
                 const { homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate } = req.body;
 
-                const pending = (homeTeamScore) == null && awayTeamScore == null; //|| this.getDataValue('matchDate') > new Date();
+                const pending = (homeTeamScore == null) && (awayTeamScore == null); //|| this.getDataValue('matchDate') > new Date();
 
                 return fixture.update({ homeTeamId, awayTeamId, homeTeamScore, awayTeamScore, matchDate, pending })
-                    .then(() => res.send(fixture))
+                    .then(() => res.status(204).send(fixture))
                     .catch(err => res.status(500).send('Error updating fixture.'));
             })
             .catch((err) => {
@@ -56,7 +58,7 @@ module.exports = {
 
         return db.Fixture.findByPk(id)
             .then(fixture => fixture.destroy())
-            .then(() => res.send({ id }))
+            .then(() => res.status(204).send({ id }))
             .catch((err) => {
                 res.status(400).send(err);
             });
@@ -64,11 +66,9 @@ module.exports = {
 
     searchFixtures: async (req, res) => {
         let searchParams = { where : {} };
-        searchParams.where.matchDate = {};
 
         const homeTeamName = req.query['homeTeamName'];
         const awayTeamName = req.query['awayTeamName'];
-        const teamName = req.query['teamName'];
         const completed = req.query['completed'];
         const fixturesBeforeDate = req.query['fixturesBeforeDate'];
         const fixturesAfterDate = req.query['fixturesAfterDate'];
@@ -104,18 +104,33 @@ module.exports = {
         }
 
         if (fixturesAfterDate !== undefined) {
+            if (!searchParams.where.matchDate) {
+                searchParams.where.matchDate = {};
+            }
             searchParams.where.matchDate[Op.gte] = fixturesAfterDate;
         }
 
         if (fixturesBeforeDate !== undefined) {
+            if (!searchParams.where.matchDate) {
+                searchParams.where.matchDate = {};
+            }
             searchParams.where.matchDate[Op.lte] = fixturesBeforeDate;
         }
 
-        try {
-            const fixtures = await db.Fixture.findAll(searchParams);
-            res.send(fixtures);
-        } catch (error) {
-            res.status(500).send('And error occured ' + error);
-        } 
+        return db.Fixture.findAll(searchParams)
+            .then((fixtures) => {
+                return res.status(200).send(fixtures);
+            })
+            .catch(err => {
+                res.status(500).send('And error occured ' + err);
+            });
+        
+        // try {
+        //     console.log({ searchParams })
+        //     const fixtures = await db.Fixture.findAll(searchParams);
+        //     return res.send(fixtures);
+        // } catch (error) {
+        //     return res.status(500).send('And error occured ' + error);
+        // } 
     }
 }
