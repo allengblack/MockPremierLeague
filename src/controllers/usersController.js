@@ -38,8 +38,6 @@ module.exports = {
     updateUser: (req, res) => {
         const id = parseInt(req.params.id);
         
-        console.log({ decoded: req.decoded })
-        
         if ( (req.decoded.id === id) || (req.decoded.isAdmin) ) {
             return db.User.findByPk(id)
             .then((user) => {
