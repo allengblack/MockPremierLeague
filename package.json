@@ -8,7 +8,7 @@
     "start": "node index.js",
     "start-dev": "set \"NODE_ENV=development\" && nodemon index.js",
     "db:migrate": "npx sequelize db:migrate",
-    "db:migrate:rollback": "./node_modules/.bin/sequelize db:migrate:undo:all",
+    "db:migrate:rollback": "npx sequelize db:migrate:undo:all",
     "pretest": "npm run db:migrate -- --env test",
     "posttest": "npm run db:migrate:rollback -- --env test && nyc report --reporter=html"
   },

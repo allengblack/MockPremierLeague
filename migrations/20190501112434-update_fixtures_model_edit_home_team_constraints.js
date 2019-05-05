@@ -11,17 +11,17 @@ module.exports = {
     */
    return queryInterface.sequelize.transaction((t) => {
         return Promise.all([
-            queryInterface.addConstraint('Fixtures', ['homeTeamId'], {
-              type: 'foreign key',
-              name: 'home_team_constraint',
+            queryInterface.addConstraint("Fixtures", ["homeTeamId"], {
+              type: "foreign key",
+              name: "home_team_constraint",
               references: { //Required field
                 table: "teams",
                 field: "id"
               }
             }, { transaction: t }),
-            queryInterface.addConstraint('Fixtures', ['awayTeamId'], {
-              type: 'foreign key',
-              name: 'away_team_constraint',
+            queryInterface.addConstraint("Fixtures", ["awayTeamId"], {
+              type: "foreign key",
+              name: "away_team_constraint",
               references: { //Required field
                 table: "teams",
                 field: "id"
