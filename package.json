@@ -7,7 +7,7 @@
     "test": "nyc mocha -R spec --recursive ./test --exit",
     "start": "node index.js",
     "start-dev": "set \"NODE_ENV=development\" && nodemon index.js",
-    "db:migrate": "./node_modules/.bin/sequelize db:migrate",
+    "db:migrate": "npx sequelize db:migrate",
     "db:migrate:rollback": "./node_modules/.bin/sequelize db:migrate:undo:all",
     "pretest": "npm run db:migrate -- --env test",
     "posttest": "npm run db:migrate:rollback -- --env test && nyc report --reporter=html"
@@ -31,6 +31,8 @@
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^1.6.5",
+    "pg": "^7.10.0",
+    "pg-hstore": "^2.3.2",
     "sequelize": "^5.8.0",
     "sequelize-cli": "^5.4.0"
   },
