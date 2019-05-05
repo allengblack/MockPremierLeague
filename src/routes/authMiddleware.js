@@ -22,7 +22,6 @@ const verifyUserAuthenticated = (req, res, next) => {
             } else {
                 req.authenticated = true;
                 req.decoded = decoded;
-                console.log({token, SECRET_KEY})
 
                 next();
             }

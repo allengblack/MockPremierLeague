@@ -83,6 +83,7 @@ module.exports = {
             });
             
             if(team) {
+                console.log({team})
                 searchParams.where.homeTeamId = team.id;
             } else {
                 res.status(404).send('Home team name provided does not match any team in league')
@@ -98,7 +99,8 @@ module.exports = {
                 }
             });
 
-            if(team) {
+            if (team) {
+                console.log({team})
                 searchParams.where.awayTeamId = team.id;
             } else {
                 res.status(404).send('Away team name provided does not match any team in league')
