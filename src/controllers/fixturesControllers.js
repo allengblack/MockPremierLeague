@@ -20,7 +20,7 @@ module.exports = {
     },
 
     getAllFixtures: (req, res) => {
-        return db.Fixture.findAll()
+        return db.Fixture.findAll({ attributes: ['id', 'homeTeamId', 'awayTeamId', 'homeTeamScore', 'awayTeamScore', 'matchDate'] })
             .then(fixtures => res.status(200).send(fixtures))
             .catch(err => res.status(500).send(err));
     },
