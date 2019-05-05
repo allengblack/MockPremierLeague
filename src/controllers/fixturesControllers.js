@@ -29,7 +29,10 @@ module.exports = {
         const id = parseInt(req.params.id);
 
         return db.Fixture.findByPk(id)
-            .then(fixture => res.send(fixture))
+            .then(fixture => {
+                if(fixture == null) res.status(404).send('fixture not found')
+                res.send(fixture)
+            })
             .catch(err => {
                 res.status(404).send(err)
             });
@@ -57,7 +60,10 @@ module.exports = {
         const id = parseInt(req.params.id);
 
         return db.Fixture.findByPk(id)
-            .then(fixture => fixture.destroy())
+            .then(fixture => {
+                if (fixture == null) res.status(404).send('fixture not found');
+                fixture.destroy()
+            })
             .then(() => res.status(204).send({ id }))
             .catch((err) => {
                 res.status(400).send(err);
@@ -107,7 +113,7 @@ module.exports = {
 
         if(completed !== undefined) {
             var value = undefined;
-            if (completed === "true") {
+            if (completed == "true") {
                 value = true;
             } else {
                 value = false;
