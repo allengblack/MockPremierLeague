@@ -20,6 +20,7 @@ module.exports = {
         
         return db.Team.findByPk(id)
             .then(team => {
+                if (team == null) res.status(404).send('team not found');
                 res.status(200).send(team)
             })
             .catch(err => {
@@ -31,6 +32,7 @@ module.exports = {
         const id = parseInt(req.params.id);
         return db.Team.findByPk(id)
             .then(team => {
+                if (team == null) res.status(404).send('team not found');
                 const { name } = req.body;
 
                 return team.update({ name })
@@ -45,7 +47,10 @@ module.exports = {
     deleteTeam: (req, res) => {
         const id = parseInt(req.params.id);
         return db.Team.findByPk(id)
-            .then(team => team.destroy())
+            .then(team => {
+                if (team == null) res.status(404).send('team not found');
+                team.destroy()
+            })
             .then(() => {
                 res.status(204).send({ id });
             })

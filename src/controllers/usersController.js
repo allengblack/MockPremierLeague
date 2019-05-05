@@ -18,6 +18,7 @@ module.exports = {
 
         return db.User.findByPk(id, {attributes: ['id', 'name', 'email']})
             .then(user => {
+                if (user == null) res.status(404).send('user not found');
                 res.send(user)
             })
             .catch(err => {
@@ -28,7 +29,10 @@ module.exports = {
     deleteUser: (req, res) => {
         const id = parseInt(req.params.id);
         return db.User.findByPk(id)
-            .then((user) => user.destroy())
+            .then((user) => {
+                if (user == null) res.status(404).send('user not found');
+                user.destroy()
+            })
             .then(() => {
                 res.status(204).send({ id })
             })
@@ -43,6 +47,7 @@ module.exports = {
         if ( (req.decoded.id === id) || (req.decoded.isAdmin) ) {
             return db.User.findByPk(id)
             .then((user) => {
+                if (user == null) res.status(404).send('user not found');
                 const { name, isAdmin } = req.body;
 
                 return user.update({ name, isAdmin })
