@@ -15,7 +15,7 @@ module.exports = {
               type: "foreign key",
               name: "home_team_constraint",
               references: { //Required field
-                table: "teams",
+                table: "Teams",
                 field: "id"
               }
             }, { transaction: t }),
@@ -23,7 +23,7 @@ module.exports = {
               type: "foreign key",
               name: "away_team_constraint",
               references: { //Required field
-                table: "teams",
+                table: "Teams",
                 field: "id"
               }
             }, { transaction: t })
