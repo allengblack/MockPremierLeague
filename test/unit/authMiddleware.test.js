@@ -41,20 +41,17 @@ describe('Auth Middleware unit tests', () => {
         });
 
         it('auth middleware should return 401 if authorization or x-access-token headers not set', () => {
-            return verifyUserAuthenticated({ ...req, headers: { 
+            verifyUserAuthenticated({ ...req, headers: { 
                 'authorization': 'randomstring',
                 'x-access-token': 'anotherrandomstring',
-            } }, res, next)
-                .catch((err) => {
-                    expect(res.statusCode).to.equal(401)
-                });
+            } }, res, next);
+
+            expect(res.statusCode).to.equal(401);
         });
 
         it('auth middleware should return 401 if authorization or x-access-token token is invalid', () => {
-            return verifyUserAuthenticated({ ...req }, res, next)
-                .catch((err) => {
-                    expect(res.statusCode).to.equal(401)
-                });
+            verifyUserAuthenticated({ ...req }, res, next);
+            expect(res.statusCode).to.equal(401);
         });
 
         it('auth middleware should return 401 if token headers not correctly verified', async () => {
@@ -66,17 +63,11 @@ describe('Auth Middleware unit tests', () => {
                 expiresIn:  expiresIn
             });
 
-            return verifyUserAuthenticated({ 
-                        ...req, 
-                        headers: { 
+            verifyUserAuthenticated({ ...req, headers: { 
                             authorization: 'Bearer ' + accessToken + '3'
-                        } 
-                    }, 
-                    res, 
-                    next)
-                    .catch((err) => {
-                        expect(res.statusCode).to.equal(401);
-                    });
+                        }
+                    }, res, next)
+            expect(res.statusCode).to.equal(401);
         });
 
         it('expect next to be called if token is verified', async () => {
@@ -89,17 +80,11 @@ describe('Auth Middleware unit tests', () => {
                 expiresIn:  expiresIn
             });
 
-            return verifyUserAuthenticated({ 
-                        ...req, 
-                        headers: { 
+            verifyUserAuthenticated({ ...req, headers: { 
                             authorization: 'Bearer ' + accessToken
                         } 
-                    }, 
-                    res, 
-                    spy)
-                    .then(() => {
-                        expect(spy).to.have.been.called;
-                    });
+                    }, res, spy)
+            expect(spy).to.have.been.called;
         });
     });
 

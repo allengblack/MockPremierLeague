@@ -32,6 +32,7 @@ routes.get('/api/fixtures', fixtures.getAllFixtures);
 routes.get('/api/fixtures/:id', fixtures.getFixtureById);
 
 routes.get('/api/search/fixtures', fixtures.searchFixtures);
+routes.get('/api/teams', teams.getAllTeams);
 
 routes.use(authMiddleware.verifyUserIsAdmin);
 
@@ -42,7 +43,6 @@ routes.put('/api/users/:id', users.updateUser);
 routes.delete('/api/users/:id', users.deleteUser);
 
 //teams
-routes.get('/api/teams', teams.getAllTeams);
 routes.get('/api/teams/:id', teams.getTeamById);
 routes.post('/api/teams', teams.createTeam);
 routes.put('/api/teams/:id', teams.updateTeam);

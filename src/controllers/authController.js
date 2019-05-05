@@ -1,6 +1,6 @@
 const db = require('../models');
 const bcrypt = require('bcryptjs');
-const SECRET_KEY = require('../../const');
+const SECRET_KEY = process.env.SECRET_KEY;
 const Sequelize = require('sequelize');
 const jwt = require('jsonwebtoken');
 
@@ -59,7 +59,7 @@ module.exports = {
                         }
                     })
                     .catch(err => {
-                        res.status(419).send('bcrypt error')
+                        res.status(500).send('error creating user')
                     })
                
             })

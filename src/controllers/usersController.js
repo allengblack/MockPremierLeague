@@ -2,7 +2,9 @@ const db = require('../models');
 
 module.exports = {
     getAllUsers: (req, res) => {
-        return db.User.findAll()
+        return db.User.findAll({
+            attributes: ['id', 'name', 'email']
+        })
             .then((users) => {
                 res.status(200).send(users)
             })
@@ -14,7 +16,7 @@ module.exports = {
     getUserById: (req, res) => {
         const id = parseInt(req.params.id);
 
-        return db.User.findByPk(id)
+        return db.User.findByPk(id, {attributes: ['id', 'name', 'email']})
             .then(user => {
                 res.send(user)
             })

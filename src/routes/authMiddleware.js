@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = require('../../const');
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const verifyUserAuthenticated = (req, res, next) => {
     const authHeader = req.headers['authorization'] || req.headers['x-access-token'];
@@ -13,25 +13,22 @@ const verifyUserAuthenticated = (req, res, next) => {
     const token = header[1];
 
     if (token) {
-        return new Promise((resolve, reject) => {
-            jwt.verify(token, SECRET_KEY, function (err, decoded) {
-                if (err) {
-                    req.authenticated = false;
-                    req.decoded = null;
-    
-                    reject(res.status(401).send('unauthorized'));
-                } else {
-                    req.authenticated = true;
-                    req.decoded = decoded;
-    
-                    resolve(next);
-                }
-            });
+        jwt.verify(token, SECRET_KEY, function (err, decoded) {
+            if (err) {
+                req.authenticated = false;
+                req.decoded = null;
+
+                res.status(401).send({err});
+            } else {
+                req.authenticated = true;
+                req.decoded = decoded;
+                console.log({token, SECRET_KEY})
+
+                next();
+            }
         });
     } else {
-        return new Promise((resolve, reject) => {
-            reject(res.status(401).send('No bearer token sent in request.'));
-        });
+        res.status(401).send('No bearer token sent in request.');
     }
 }
 
