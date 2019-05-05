@@ -81,8 +81,12 @@ module.exports = {
                     }
                 }
             });
-
-            searchParams.where.homeTeamId = team.id;
+            
+            if(team) {
+                searchParams.where.homeTeamId = team.id;
+            } else {
+                res.status(404).send('Home team name provided does not match any team in league')
+            }
         }
 
         if(awayTeamName !== undefined) {
@@ -94,12 +98,22 @@ module.exports = {
                 }
             });
 
-            searchParams.where.awayTeamId = team.id;
+            if(team) {
+                searchParams.where.awayTeamId = team.id;
+            } else {
+                res.status(404).send('Away team name provided does not match any team in league')
+            }
         }
 
         if(completed !== undefined) {
+            var value = undefined;
+            if (completed === "true") {
+                value = true;
+            } else {
+                value = false;
+            }
             searchParams.where.pending = {
-                [Op.eq] : !completed
+                [Op.eq] : !value
             };
         }
 
@@ -117,20 +131,12 @@ module.exports = {
             searchParams.where.matchDate[Op.lte] = fixturesBeforeDate;
         }
 
-        return db.Fixture.findAll(searchParams)
+        return db.Fixture.findAll({ ...searchParams, attributes: ['id', 'homeTeamId', 'awayTeamId', 'homeTeamScore', 'awayTeamScore', 'matchDate'] })
             .then((fixtures) => {
                 return res.status(200).send(fixtures);
             })
             .catch(err => {
                 res.status(500).send('And error occured ' + err);
             });
-        
-        // try {
-        //     console.log({ searchParams })
-        //     const fixtures = await db.Fixture.findAll(searchParams);
-        //     return res.send(fixtures);
-        // } catch (error) {
-        //     return res.status(500).send('And error occured ' + error);
-        // } 
     }
 }
