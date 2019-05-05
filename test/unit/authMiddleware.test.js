@@ -1,7 +1,9 @@
+require('dotenv').config();
+
 process.env.NODE_ENV = 'test';
 
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = require('../../const');
+const SECRET_KEY = process.env.SECRET_KEY;
 const { expect } = require('chai');
 const db = require('../../src/models');
 const bcrypt = require('bcryptjs');
