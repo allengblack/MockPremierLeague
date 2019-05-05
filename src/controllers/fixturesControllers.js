@@ -74,35 +74,33 @@ module.exports = {
         const fixturesAfterDate = req.query['fixturesAfterDate'];
 
         if(homeTeamName !== undefined) {
-            let team = await db.Team.findOne({ 
-                where: { 
-                    name: {
-                        [Op.substring]: homeTeamName
+            try {
+                let team = await db.Team.findOne({ 
+                    where: { 
+                        name: {
+                            [Op.substring]: homeTeamName
+                        }
                     }
-                }
-            });
-            
-            if(team) {
-                console.log({team})
+                });
+
                 searchParams.where.homeTeamId = team.id;
-            } else {
+            } catch (error) {
                 res.status(404).send('Home team name provided does not match any team in league')
             }
         }
 
         if(awayTeamName !== undefined) {
-            let team = await db.Team.findOne({ 
-                where: { 
-                    name: {
-                        [Op.substring]: awayTeamName
+            try {
+                let team = await db.Team.findOne({ 
+                    where: { 
+                        name: {
+                            [Op.substring]: awayTeamName
+                        }
                     }
-                }
-            });
-
-            if (team) {
-                console.log({team})
+                });
+                
                 searchParams.where.awayTeamId = team.id;
-            } else {
+            } catch (error) {
                 res.status(404).send('Away team name provided does not match any team in league')
             }
         }
