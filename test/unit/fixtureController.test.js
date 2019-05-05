@@ -210,9 +210,31 @@ describe('FixtureController Unit Tests', () => {
     describe('searchFixtures', () => {
         it('should return 200 when completed query supplied', () => {
 
-            return searchFixtures({ ...req, query: { completed: true } }, res)
+            return searchFixtures({ ...req, query: { completed: "true" } }, res)
                 .then(() => {
                     expect(res.statusCode).to.equal(200);
+                });
+        });
+
+        it('should return 200 when completed query supplied', () => {
+
+            return searchFixtures({ ...req, query: { completed: "false" } }, res)
+                .then(() => {
+                    expect(res.statusCode).to.equal(200);
+                });
+        });
+
+        it('should return 404 when home team name does not match teams in DB', () => {
+            return searchFixtures({ ...req, query: { homeTeamName: '6516184534848' } }, res)
+                .catch(() => {
+                    expect(res.statusCode).to.equal(404);
+                });
+        });
+
+        it('should return 404 when away team name does not match teams in DB', () => {
+            return searchFixtures({ ...req, query: { awayTeamName: '6516184534848' } }, res)
+                .catch(() => {
+                    expect(res.statusCode).to.equal(404);
                 });
         });
     });

@@ -113,7 +113,7 @@ module.exports = {
 
         if(completed !== undefined) {
             var value = undefined;
-            if (completed === "true") {
+            if (completed == "true") {
                 value = true;
             } else {
                 value = false;
