@@ -139,7 +139,7 @@ module.exports = {
 
         if(result != undefined) {
             console.log('from cache: ' + key)
-            res.send(value);
+            res.send(result);
         } else {
             let searchParams = { where : {} };
 
