@@ -3,7 +3,6 @@ process.env.NODE_ENV = 'test';
 const { expect } = require('chai');
 const { createFixture, getAllFixtures, getFixtureById, updateFixture, deleteFixture, searchFixtures } = require('../../src/controllers/fixturesControllers');
 const db = require('../../src/models');
-const bcrypt = require('bcryptjs');
 
 const req = {
     body: {},
@@ -88,6 +87,13 @@ describe('FixtureController Unit Tests', () => {
         });
 
         it('it should return 200 if fixture recovery successful', async () => {
+            before(async () => {
+                getAllFixtures({ ...req, body: { } }, res)
+                    .then(() => {
+                        expect(res.statusCode).to.equal(200);
+                    });
+            });
+
             return getAllFixtures({ ...req, body: { } }, res)
                 .then(() => {
                     expect(res.statusCode).to.equal(200);
@@ -190,7 +196,7 @@ describe('FixtureController Unit Tests', () => {
     describe('searchFixtures', () => {
         it('should return 200 when home team name supplied', () => {
 
-            return searchFixtures({ ...req, query: { homeTeamName: 'Uyo Meyo' } }, res)
+            return searchFixtures({ ...req, query: { homeTeamName: 'Uyo Meyo' }, url: 'key' }, res)
                 .then(() => {
                     expect(res.statusCode).to.equal(200);
                 });
@@ -200,7 +206,7 @@ describe('FixtureController Unit Tests', () => {
     describe('searchFixtures', () => {
         it('should return 200 when away team name supplied', () => {
 
-            return searchFixtures({ ...req, query: { awayTeamName: 'Lewl' } }, res)
+            return searchFixtures({ ...req, query: { awayTeamName: 'Lewl' }, url: 'key' }, res)
                 .then(() => {
                     expect(res.statusCode).to.equal(200);
                 });
@@ -210,7 +216,7 @@ describe('FixtureController Unit Tests', () => {
     describe('searchFixtures', () => {
         it('should return 200 when completed query supplied', () => {
 
-            return searchFixtures({ ...req, query: { completed: "true" } }, res)
+            return searchFixtures({ ...req, query: { completed: "true" }, url: 'key' }, res)
                 .then(() => {
                     expect(res.statusCode).to.equal(200);
                 });
@@ -218,21 +224,21 @@ describe('FixtureController Unit Tests', () => {
 
         it('should return 200 when completed query supplied', () => {
 
-            return searchFixtures({ ...req, query: { completed: "false" } }, res)
+            return searchFixtures({ ...req, query: { completed: "false" }, url: 'key' }, res)
                 .then(() => {
                     expect(res.statusCode).to.equal(200);
                 });
         });
 
         it('should return 404 when home team name does not match teams in DB', () => {
-            return searchFixtures({ ...req, query: { homeTeamName: '6516184534848' } }, res)
+            return searchFixtures({ ...req, query: { homeTeamName: '6516184534848' }, url: 'key' }, res)
                 .catch(() => {
                     expect(res.statusCode).to.equal(404);
                 });
         });
 
         it('should return 404 when away team name does not match teams in DB', () => {
-            return searchFixtures({ ...req, query: { awayTeamName: '6516184534848' } }, res)
+            return searchFixtures({ ...req, query: { awayTeamName: '6516184534848' }, url: 'key' }, res)
                 .catch(() => {
                     expect(res.statusCode).to.equal(404);
                 });
@@ -242,7 +248,7 @@ describe('FixtureController Unit Tests', () => {
     describe('searchFixtures', () => {
         it('should return 200 when before match date query supplied', () => {
 
-            return searchFixtures({ ...req, query: { fixturesBeforeDate: new Date() } }, res)
+            return searchFixtures({ ...req, query: { fixturesBeforeDate: new Date() }, url: 'key' }, res)
                 .then(() => {
                     expect(res.statusCode).to.equal(200);
                 });
@@ -252,7 +258,7 @@ describe('FixtureController Unit Tests', () => {
     describe('searchFixtures', () => {
         it('should return 200 when after match date query supplied', () => {
 
-            return searchFixtures({ ...req, query: { fixturesAfterDate: new Date() } }, res)
+            return searchFixtures({ ...req, query: { fixturesAfterDate: new Date() }, url: 'key' }, res)
                 .then(() => {
                     expect(res.statusCode).to.equal(200);
                 });
